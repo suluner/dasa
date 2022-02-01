@@ -1,0 +1,8 @@
+# common config
+common --color=yes
+test --jobs=1
+test --test_timeout=100000
+test --verbose_failures
+test --test_output=errors
+build  --verbose_failures
+build --spawn_strategy=local  # this is a workaround to include third party source files with BUILD.bazel.
