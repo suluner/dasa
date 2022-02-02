@@ -30,3 +30,9 @@
 *.exe
 *.out
 *.app
+
+# bazel 
+bazel-*
+
+# ide
+.vscode
