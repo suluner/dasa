@@ -1,8 +1,8 @@
 /* Copyright 2022 Hu Ting. All Rights Reserved.
 ==============================================*/
 
-#ifndef DASA_DS_GRAPH_GRAPH_H_
-#define DASA_DS_GRAPH_GRAPH_H_
+#ifndef DASA_DS_GRAPH_ADJ_TABLE_GRAPH_H_
+#define DASA_DS_GRAPH_ADJ_TABLE_GRAPH_H_
 
 #include <iostream>
 #include <vector>
@@ -23,14 +23,23 @@ struct Edge {
   }
 };
 
-class Graph {
+class AdjTableGraph {
  public:
-  static std::shared_ptr<Graph> Build();
+  AdjTableGraph(int v, int e)
+      : vertices_num{v},
+        edges_num{e},
+        vertices{vertices_num, std::vector<Edge>()} {}
+
+  void AddEdge(const Edge& edge);
+
   std::vector<Edge> GetEdges() {
     return edges;
   }
+
   void SortEdges();
+
   std::vector<Edge> KruskalMst();
+
   std::vector<Edge> PrimMst();
 
  private:
@@ -38,17 +47,10 @@ class Graph {
   int edges_num;  // number of Edges
   std::vector<std::vector<Edge>> vertices;
   std::vector<Edge> edges;
-
-  Graph(int v, int e)
-      : vertices_num{v},
-        edges_num{e},
-        vertices{vertices_num, std::vector<Edge>()} {}
-
-  void AddEdge(const Edge& edge);
 };
 
 }  // namespace ds
 
 }  // namespace dasa
 
-#endif  // DASA_DS_GRAPH_GRAPH_H_
+#endif  // DASA_DS_GRAPH_ADJ_TABLE_GRAPH_H_

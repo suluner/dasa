@@ -1,7 +1,7 @@
 /* Copyright 2022 Hu Ting. All Rights Reserved.
 ==============================================*/
 
-#include "dasa/ds/graph/graph.h"
+#include "dasa/ds/graph/adj_table_graph.h"
 
 #include <queue>
 #include <memory>
@@ -23,53 +23,18 @@ bool SortComparer(Edge a, Edge b) {
   return (a.from + a.to + a.weight <= b.from + b.to + b.weight);
 }
 
-std::shared_ptr<Graph> Graph::Build() {
-  std::shared_ptr<Graph> graph = std::shared_ptr<Graph>(new Graph(9, 15));
-  Edge edge_0(0, 1, 10);
-  graph->AddEdge(edge_0);
-  Edge edge_1(0, 5, 11);
-  graph->AddEdge(edge_1);
-  Edge edge_2(1, 2, 18);
-  graph->AddEdge(edge_2);
-  Edge edge_3(1, 6, 16);
-  graph->AddEdge(edge_3);
-  Edge edge_4(1, 8, 12);
-  graph->AddEdge(edge_4);
-  Edge edge_5(2, 3, 22);
-  graph->AddEdge(edge_5);
-  Edge edge_6(2, 8, 8);
-  graph->AddEdge(edge_6);
-  Edge edge_7(3, 4, 20);
-  graph->AddEdge(edge_7);
-  Edge edge_8(3, 6, 24);
-  graph->AddEdge(edge_8);
-  Edge edge_9(3, 7, 16);
-  graph->AddEdge(edge_9);
-  Edge edge_10(3, 8, 21);
-  graph->AddEdge(edge_10);
-  Edge edge_11(4, 5, 26);
-  graph->AddEdge(edge_11);
-  Edge edge_12(4, 7, 7);
-  graph->AddEdge(edge_12);
-  Edge edge_13(5, 6, 17);
-  graph->AddEdge(edge_13);
-  Edge edge_14(6, 7, 19);
-  graph->AddEdge(edge_14);
-  return graph;
-}
-
-void Graph::SortEdges() {
+void AdjTableGraph::SortEdges() {
   std::sort(edges.begin(), edges.end(), SortComparer);
 }
 
-void Graph::AddEdge(const Edge& edge) {
+void AdjTableGraph::AddEdge(const Edge& edge) {
   vertices[edge.from].push_back(edge);
   Edge reverse_edge(edge.to, edge.from, edge.weight);
   vertices[edge.to].push_back(reverse_edge);
   edges.push_back(edge);
 }
 
-std::vector<Edge> Graph::PrimMst() {
+std::vector<Edge> AdjTableGraph::PrimMst() {
   // priority queue to maintain edges with respect to weights
   std::priority_queue<Edge> pri_queue;
   std::vector<bool> marked(vertices_num, false);
@@ -102,7 +67,7 @@ std::vector<Edge> Graph::PrimMst() {
   return mst;
 }
 
-std::vector<Edge> Graph::KruskalMst() {
+std::vector<Edge> AdjTableGraph::KruskalMst() {
   SortEdges();
   UnionFind uf(vertices_num);
   int e = 0;
