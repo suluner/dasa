@@ -17,14 +17,14 @@ struct Edge {
   int from;
   int to;
   int weight;
-  Edge(int x, int y, int w) : from(x), to(y), weight(w) {}
+  Edge(int x, int y, int w = 1) : from(x), to(y), weight(w) {}
 };
 
 class AdjMatrixGraph {
  public:
   explicit AdjMatrixGraph(int vertices);
 
-  void AddEdge(Edge edge, bool is_directed = false);
+  void AddEdge(const Edge& edge, bool is_directed = false);
 
   int Dijkstra(int source, int target);
 

@@ -23,7 +23,7 @@ AdjMatrixGraph::AdjMatrixGraph(int vertices)
   }
 }
 
-void AdjMatrixGraph::AddEdge(Edge edge, bool is_directed) {
+void AdjMatrixGraph::AddEdge(const Edge& edge, bool is_directed) {
   matrix[edge.from][edge.to] = edge.weight;
   if (!is_directed) {
     matrix[edge.to][edge.from] = edge.weight;

@@ -47,6 +47,50 @@ std::unique_ptr<AdjTableGraph> BuildGraph() {
   return graph;
 }
 
+std::unique_ptr<AdjTableGraph> BuildDAG() {
+  auto graph = std::unique_ptr<AdjTableGraph>(new AdjTableGraph(6, 6));
+  Edge edge = Edge(5, 0);
+  graph->AddEdge(edge, true);
+  edge = Edge(4, 0);
+  graph->AddEdge(edge, true);
+  edge = Edge(5, 2);
+  graph->AddEdge(edge, true);
+  edge = Edge(4, 1);
+  graph->AddEdge(edge, true);
+  edge = Edge(2, 3);
+  graph->AddEdge(edge, true);
+  edge = Edge(3, 1);
+  graph->AddEdge(edge, true);
+  return graph;
+}
+
+std::unique_ptr<AdjTableGraph> BuildAOE() {
+  auto graph = std::unique_ptr<AdjTableGraph>(new AdjTableGraph(9, 11));
+  Edge edge = Edge(0, 1, 6);
+  graph->AddEdge(edge, true);
+  edge = Edge(0, 2, 4);
+  graph->AddEdge(edge, true);
+  edge = Edge(0, 3, 5);
+  graph->AddEdge(edge, true);
+  edge = Edge(1, 4, 1);
+  graph->AddEdge(edge, true);
+  edge = Edge(2, 4, 1);
+  graph->AddEdge(edge, true);
+  edge = Edge(3, 5, 2);
+  graph->AddEdge(edge, true);
+  edge = Edge(4, 6, 9);
+  graph->AddEdge(edge, true);
+  edge = Edge(4, 7, 7);
+  graph->AddEdge(edge, true);
+  edge = Edge(5, 7, 4);
+  graph->AddEdge(edge, true);
+  edge = Edge(6, 8, 2);
+  graph->AddEdge(edge, true);
+  edge = Edge(7, 8, 4);
+  graph->AddEdge(edge, true);
+  return graph;
+}
+
 TEST(AdjTableGraphTest, PrimMst) {
   auto graph = BuildGraph();
   std::vector<Edge> edges = graph->PrimMst();
@@ -69,6 +113,21 @@ TEST(AdjTableTest, KruskalMst) {
   }
   std::cout << min_count << std::endl;
   EXPECT_EQ(min_count, 99);
+}
+
+TEST(AdjTableTest, TopoSort) {
+  auto graph = BuildDAG();
+  std::vector<int> vertices = graph->TopoSort();
+  std::cout << "vertices num: " << vertices.size() << std::endl;
+  EXPECT_EQ(vertices.size(), 6);
+  for (int node : vertices) {
+    std::cout << node << std::endl;
+  }
+}
+
+TEST(AdjTableTest, CriticalPath) {
+  auto graph = BuildAOE();
+  graph->CriticalPath();
 }
 
 int main(int argc, char** argv) {

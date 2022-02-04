@@ -27,10 +27,13 @@ void AdjTableGraph::SortEdges() {
   std::sort(edges.begin(), edges.end(), SortComparer);
 }
 
-void AdjTableGraph::AddEdge(const Edge& edge) {
+void AdjTableGraph::AddEdge(const Edge& edge, bool is_directed) {
   vertices[edge.from].push_back(edge);
-  Edge reverse_edge(edge.to, edge.from, edge.weight);
-  vertices[edge.to].push_back(reverse_edge);
+  in_degree[edge.to]++;
+  if (!is_directed) {
+    Edge reverse_edge(edge.to, edge.from, edge.weight);
+    vertices[edge.to].push_back(reverse_edge);
+  }
   edges.push_back(edge);
 }
 
@@ -84,6 +87,58 @@ std::vector<Edge> AdjTableGraph::KruskalMst() {
     }
   }
   return mst;
+}
+
+std::vector<int> AdjTableGraph::TopoSort() {
+  std::queue<int> queue;
+  for (int i = 0; i < vertices_num; ++i) {
+    if (in_degree[i] == 0) {
+      queue.push(i);
+    }
+  }
+  std::vector<int> result;
+  while (!queue.empty()) {
+    int v = queue.front();
+    queue.pop();
+    result.push_back(v);
+    for (auto edge : vertices[v]) {
+      if (!(--in_degree[edge.to])) {
+        queue.push(edge.to);
+      }
+      if (vertice_earliest[v] + edge.weight > vertice_earliest[edge.to]) {
+        vertice_earliest[edge.to] = vertice_earliest[v] + edge.weight;
+      }
+    }
+  }
+  return result;
+}
+
+void AdjTableGraph::CriticalPath() {
+  std::vector<int> topo_sort_vertices = TopoSort();
+  for (int i = 0; i < vertices_num; ++i) {
+    vertice_latest[i] = vertice_earliest[vertices_num - 1];
+  }
+
+  std::vector<int> reversed_topo_sort_vertices(topo_sort_vertices);
+  std::reverse(
+      reversed_topo_sort_vertices.begin(), reversed_topo_sort_vertices.end());
+  for (int vertice : reversed_topo_sort_vertices) {
+    for (Edge edge : edges) {
+      if (edge.to == vertice) {
+        if (vertice_latest[vertice] - edge.weight < vertice_latest[edge.from]) {
+          vertice_latest[edge.from] = vertice_latest[vertice] - edge.weight;
+        }
+      }
+    }
+  }
+  std::vector<int> edge_earliest(edges_num, 0);
+  std::vector<int> edge_latest(edges_num, 0);
+  for (int i = 0; i < edges_num; ++i) {
+    edge_earliest[i] = vertice_earliest[edges[i].from];
+    edge_latest[i] = vertice_latest[edges[i].to] - edges[i].weight;
+    const char* tag = edge_earliest[i] == edge_latest[i] ? "*" : "";
+    std::cout << "edge: " << i << tag << std::endl;
+  }
 }
 
 }  // namespace ds

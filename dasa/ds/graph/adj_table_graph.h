@@ -17,7 +17,7 @@ struct Edge {
   int from;
   int to;
   int weight;
-  Edge(int x, int y, int w) : from(x), to(y), weight(w) {}
+  Edge(int x, int y, int w = 1) : from(x), to(y), weight(w) {}
   bool operator<(const Edge& edge) const {
     return weight >= edge.weight;  // less weight first out
   }
@@ -28,9 +28,12 @@ class AdjTableGraph {
   AdjTableGraph(int v, int e)
       : vertices_num{v},
         edges_num{e},
-        vertices{vertices_num, std::vector<Edge>()} {}
+        vertices{vertices_num, std::vector<Edge>()},
+        in_degree(vertices_num, 0),
+        vertice_earliest(vertices_num, 0),
+        vertice_latest(vertices_num, 0) {}
 
-  void AddEdge(const Edge& edge);
+  void AddEdge(const Edge& edge, bool is_directed = false);
 
   std::vector<Edge> GetEdges() {
     return edges;
@@ -42,11 +45,18 @@ class AdjTableGraph {
 
   std::vector<Edge> PrimMst();
 
+  std::vector<int> TopoSort();
+
+  void CriticalPath();
+
  private:
   int vertices_num;  // number of vertices
   int edges_num;  // number of Edges
   std::vector<std::vector<Edge>> vertices;
   std::vector<Edge> edges;
+  std::vector<int> in_degree;
+  std::vector<int> vertice_earliest;
+  std::vector<int> vertice_latest;
 };
 
 }  // namespace ds

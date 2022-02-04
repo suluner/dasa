@@ -4,6 +4,12 @@
 
 ### Graph
 
+#### Search
+
+- DFS
+
+- BFS
+
 #### Minimum Spanning Tree
 
 - Prim
@@ -17,5 +23,7 @@
 - Floyd
 
 #### Topo Sort
+
+#### Critical Path
 
 ## ALGO(algorithms)
