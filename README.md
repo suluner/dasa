@@ -4,11 +4,11 @@
 
 ### Graph
 
-#### Travese
+#### Traverse
 
 - DFS
     - Recursion
-    
+
     - Stack
 
 - BFS
