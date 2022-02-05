@@ -4,9 +4,12 @@
 
 ### Graph
 
-#### Search
+#### Travese
 
 - DFS
+    - Recursion
+    
+    - Stack
 
 - BFS
 

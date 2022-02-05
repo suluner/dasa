@@ -49,6 +49,29 @@ std::unique_ptr<AdjMatrixGraph> BuildGraph() {
   return graph;
 }
 
+std::unique_ptr<AdjMatrixGraph> BuildDAG() {
+  auto graph = std::unique_ptr<AdjMatrixGraph>(new AdjMatrixGraph(7));
+  Edge edge = Edge(0, 1);
+  graph->AddEdge(edge, true);
+  edge = Edge(0, 2);
+  graph->AddEdge(edge, true);
+  edge = Edge(0, 3);
+  graph->AddEdge(edge, true);
+  edge = Edge(1, 4);
+  graph->AddEdge(edge, true);
+  edge = Edge(2, 4);
+  graph->AddEdge(edge, true);
+  edge = Edge(2, 5);
+  graph->AddEdge(edge, true);
+  edge = Edge(3, 5);
+  graph->AddEdge(edge, true);
+  edge = Edge(4, 6);
+  graph->AddEdge(edge, true);
+  edge = Edge(5, 6);
+  graph->AddEdge(edge, true);
+  return graph;
+}
+
 TEST(AdjMatrixGraphTest, Dijkstra) {
   auto graph = BuildGraph();
   int min_count = graph->Dijkstra(0, 8);
@@ -59,6 +82,28 @@ TEST(AdjMatrixGraphTest, Floyd) {
   auto graph = BuildGraph();
   auto result = graph->Floyd();
   std::cout << result[0][8] << std::endl;
+}
+
+TEST(AdjMatrixGraphTest, DFS) {
+  auto graph = BuildDAG();
+  auto result = graph->DFSTraverseWithRecursion();
+  std::cout << "DFS with Recursion..." << std::endl;
+  for (auto vertice : result) {
+    std::cout << vertice << std::endl;
+  }
+  std::cout << "DFS with Stack..." << std::endl;
+  result = graph->DFSTraverseWithStack();
+  for (auto vertice : result) {
+    std::cout << vertice << std::endl;
+  }
+}
+
+TEST(AdjMatrixGraphTest, BFS) {
+  auto graph = BuildDAG();
+  auto result = graph->BFSTraverse();
+  for (auto vertice : result) {
+    std::cout << vertice << std::endl;
+  }
 }
 
 int main(int argc, char** argv) {

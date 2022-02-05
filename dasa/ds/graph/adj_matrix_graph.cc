@@ -8,6 +8,7 @@
 #include <queue>
 #include <functional>
 #include <utility>
+#include <stack>
 
 namespace dasa {
 
@@ -83,6 +84,81 @@ std::vector<std::vector<int64_t>> AdjMatrixGraph::Floyd() {
     for (int i = 0; i < vertices_num; i++) {
       for (int j = 0; j < vertices_num; j++) {
         result[i][j] = std::min(result[i][j], result[i][k] + result[k][j]);
+      }
+    }
+  }
+  return result;
+}
+
+std::vector<int> AdjMatrixGraph::DFSTraverseWithRecursion() {
+  std::vector<int> result;
+  std::vector<bool> visited(vertices_num, false);
+  // run times same as connected components in graph
+  for (int i = 0; i < vertices_num; ++i) {
+    if (!visited[i]) {
+      DFS(i, result, visited);
+    }
+  }
+  return result;
+}
+
+void AdjMatrixGraph::DFS(int vertice, std::vector<int>& result,
+                         std::vector<bool>& visited) {
+  result.push_back(vertice);
+  visited[vertice] = true;
+  for (int i=0; i < vertices_num; ++i) {
+    if (matrix[vertice][i] < Inf && matrix[vertice][i] > 0 && !visited[i]) {
+      DFS(i, result, visited);
+    }
+  }
+}
+
+std::vector<int> AdjMatrixGraph::DFSTraverseWithStack() {
+  std::vector<int> result;
+  std::vector<bool> visited(vertices_num, false);
+  std::stack<int> stack;
+  // run times same as connected components in graph
+  for (int i = 0; i < vertices_num; ++i) {
+    if (!visited[i]) {
+      stack.push(i);
+      while (!stack.empty()) {
+        int vertice = stack.top();
+        stack.pop();
+        result.push_back(vertice);
+        visited[vertice] = true;
+        for (int j = vertices_num; j > 0; --j) {
+          if (matrix[vertice][j-1] < Inf &&
+              matrix[vertice][j-1] > 0 && !visited[j-1]) {
+            stack.push(j-1);
+          }
+        }
+      }
+    }
+  }
+  return result;
+}
+
+std::vector<int> AdjMatrixGraph::BFSTraverse() {
+  std::vector<int> result;
+  std::vector<bool> visited(vertices_num, false);
+  std::queue<int> queue;
+  // run times same as connected components in graph
+  for (int i = 0; i < vertices_num; ++i) {
+    if (!visited[i]) {
+      result.push_back(i);
+      visited[i] = true;
+      queue.push(i);
+      while (!queue.empty()) {
+        int vertice = queue.front();
+        queue.pop();
+        for (int j = 0; j < vertices_num; ++j) {
+          if (matrix[vertice][j] < Inf &&
+              matrix[vertice][j] > 0 && !visited[j]) {
+            result.push_back(j);
+            visited[j] = true;
+            queue.push(j);
+          }
+        }
       }
     }
   }

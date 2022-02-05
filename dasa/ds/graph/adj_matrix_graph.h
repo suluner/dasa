@@ -30,9 +30,16 @@ class AdjMatrixGraph {
 
   std::vector<std::vector<int64_t>> Floyd();
 
+  std::vector<int> DFSTraverseWithRecursion();
+
+  std::vector<int> DFSTraverseWithStack();
+
+  std::vector<int> BFSTraverse();
+
  private:
   int vertices_num;
   std::vector<std::vector<int64_t>> matrix;
+  void DFS(int vertice, std::vector<int>& result, std::vector<bool>& visited);  // NOLINT
 };
 
 }  // namespace ds
